@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { getInfo, submitJoke } from './jokesAPI';
+import React, { useState } from 'react';
+import { submitJoke } from './jokesAPI';
+import { useSelector } from 'react-redux';
+import { selectCategories } from './jokesSlice';
 import styled from 'styled-components';
 
 const StyledSubmitJokesComponent = styled.div`
@@ -83,21 +85,10 @@ const TwoPartJokeText = ({
 export function SubmitJokePage() {
   const [category, setCategory] = useState('Any');
   const [jokeType, setJokeType] = useState('single');
-  const [categories, setCategories] = useState<[string] | []>([]);
   const [jokeText, setJokeText] = useState('');
   const [setupText, setSetupText] = useState('');
   const [deliveryText, setDeliveryText] = useState('');
-
-  useEffect(() => {
-    getInfo().then((info) => {
-      // consider replacing the if statement with tenary operator - ? :
-      if (info?.jokes?.categories?.length !== 0) {
-        setCategories(info.jokes.categories);
-        console.log(categories);
-      }
-    });
-    // run only once
-  }, []);
+  const categories = useSelector(selectCategories);
 
   const onJokeSubmit = (event: any) => {
     event.preventDefault();

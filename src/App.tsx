@@ -1,8 +1,11 @@
-import React, { FunctionComponent } from 'react';
+import React, { useEffect, FunctionComponent } from 'react';
 import { Router, Link, RouteComponentProps } from '@reach/router';
 import styled from 'styled-components';
 import { Jokes } from './features/Jokes/Jokes';
 import { SubmitJokePage } from './features/Jokes/SubmitJokePage';
+import { getInfo } from './features/Jokes/jokesAPI';
+import { useDispatch } from 'react-redux';
+import { setTotalCount, setCategories } from './features/Jokes/jokesSlice';
 
 // the wrapper below was implemented because typescript was complaining about 'path' prop on the component
 type Props = { component: FunctionComponent } & RouteComponentProps;
@@ -41,6 +44,22 @@ const Main = styled.div`
 `;
 
 function App() {
+  const dispatch = useDispatch();
+
+  // we are loading categories here so they can be used in both Jokes and SubmitJokePage components
+  useEffect(() => {
+    getInfo().then((info) => {
+      if (info?.jokes?.totalCount) {
+        dispatch(setTotalCount(info.jokes.totalCount));
+      }
+      if (info?.jokes?.categories?.length !== 0) {
+        dispatch(setCategories(info.jokes.categories));
+      }
+    });
+    // initial load
+    // run only once
+  }, []);
+
   return (
     <StyledApp>
       <Header className="App-header">

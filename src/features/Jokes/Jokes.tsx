@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { getInfo, getJokes, jokeType } from './jokesAPI';
+import { getJokes, jokeType } from './jokesAPI';
 import { useSelector, useDispatch } from 'react-redux';
 import {
+  selectTotalCount,
   selectJokesList,
   selectCategories,
   setJokesList,
-  setCategories,
 } from './jokesSlice';
 import styled from 'styled-components';
 
@@ -67,28 +67,12 @@ const SingleJoke = ({ joke }: { joke: jokeType }) => {
 
 export function Jokes() {
   const [searchString, setSearchString] = useState('');
-  const [totalCount, setTotalCount] = useState(0);
   const [category, setCategory] = useState('Any');
   const [errorMessage, setErrorMessage] = useState('');
+  const totalCount = useSelector(selectTotalCount);
   const jokesList = useSelector(selectJokesList);
   const categories = useSelector(selectCategories);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    getInfo().then((info) => {
-      if (info?.jokes?.totalCount) {
-        setTotalCount(info.jokes.totalCount);
-      }
-      // consider replacing the if statement with tenary operator - ? :
-      if (info?.jokes?.categories?.length !== 0) {
-        dispatch(setCategories(info.jokes.categories));
-        console.log(categories);
-      }
-    });
-    // initial load
-    fetchJokes();
-    // run only once
-  }, []);
 
   useEffect(() => {
     fetchJokes(category, searchString);
