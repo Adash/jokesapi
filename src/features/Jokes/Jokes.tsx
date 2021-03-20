@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { getInfo, getJokes, jokeType } from './jokesAPI';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  selectJokesList,
+  selectCategories,
+  setJokesList,
+  setCategories,
+} from './jokesSlice';
 import styled from 'styled-components';
 
 const StyledJokesComponent = styled.div`
@@ -62,10 +69,10 @@ export function Jokes() {
   const [searchString, setSearchString] = useState('');
   const [totalCount, setTotalCount] = useState(0);
   const [category, setCategory] = useState('Any');
-  const [amount, setAmount] = useState(10);
-  const [jokesList, setJokesList] = useState<[jokeType] | []>([]);
-  const [categories, setCategories] = useState<[string] | []>([]);
   const [errorMessage, setErrorMessage] = useState('');
+  const jokesList = useSelector(selectJokesList);
+  const categories = useSelector(selectCategories);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     getInfo().then((info) => {
@@ -74,7 +81,7 @@ export function Jokes() {
       }
       // consider replacing the if statement with tenary operator - ? :
       if (info?.jokes?.categories?.length !== 0) {
-        setCategories(info.jokes.categories);
+        dispatch(setCategories(info.jokes.categories));
         console.log(categories);
       }
     });
@@ -84,31 +91,27 @@ export function Jokes() {
   }, []);
 
   useEffect(() => {
-    fetchJokes(category, amount, searchString);
+    fetchJokes(category, searchString);
   }, [searchString]);
 
-  const fetchJokes = (
-    category?: string,
-    amount?: number,
-    searchString?: string
-  ) => {
-    getJokes(category, amount, searchString).then(
-      ({ jokes, status, message }) => {
-        if (status === 'finished') {
-          //reset message
-          setErrorMessage('');
-          setJokesList(jokes);
-        }
-        if (status === 'error') {
-          // reset jokes list
-          setJokesList([]);
-          setErrorMessage(message);
-        }
+  const fetchJokes = (category?: string, searchString?: string) => {
+    getJokes(category, searchString).then(({ jokes, status, message }) => {
+      if (status === 'finished') {
+        //reset message
+        setErrorMessage('');
+        dispatch(setJokesList(jokes));
       }
-    );
+      if (status === 'error') {
+        // reset jokes list
+        dispatch(setJokesList([]));
+        setErrorMessage(message);
+      }
+    });
   };
 
   const onCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    // reset search string in order to prevent unpredictable states
+    setSearchString('');
     setCategory(event.target.value);
     fetchJokes(event.target.value);
   };
@@ -122,7 +125,9 @@ export function Jokes() {
         <select value={category} onChange={onCategoryChange}>
           {categories.length !== 0
             ? categories.map((category: string) => (
-                <option value={category}>{category}</option>
+                <option key={category} value={category}>
+                  {category}
+                </option>
               ))
             : null}
         </select>

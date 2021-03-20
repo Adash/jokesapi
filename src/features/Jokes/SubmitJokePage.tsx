@@ -159,7 +159,9 @@ export function SubmitJokePage() {
         >
           {categories.length !== 0
             ? categories.map((category: string) => (
-                <option value={category}>{category}</option>
+                <option key={category} value={category}>
+                  {category}
+                </option>
               ))
             : null}
         </select>

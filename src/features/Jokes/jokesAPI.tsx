@@ -39,7 +39,6 @@ export type submitJokeType = {
 
 export async function getJokes(
   category: string = 'Any',
-  amount: number = 10,
   searchString: string = ''
 ): Promise<{ jokes: [jokeType]; status: string; message: string }> {
   let jokes = [];
@@ -48,8 +47,8 @@ export async function getJokes(
 
   const getURL = () =>
     searchString === ''
-      ? `${jokesURL}/joke/${category}?amount=${amount}&safe-mode`
-      : `${jokesURL}/joke/${category}?amount=${amount}&contains=${encodeURIComponent(
+      ? `${jokesURL}/joke/${category}?amount=10&safe-mode`
+      : `${jokesURL}/joke/${category}?amount=10&contains=${encodeURIComponent(
           searchString
         )}&safe-mode`;
   console.log(getURL());

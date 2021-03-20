@@ -1,6 +1,5 @@
 import React, { FunctionComponent } from 'react';
 import { Router, Link, RouteComponentProps } from '@reach/router';
-import { Counter } from './features/counter/Counter';
 import styled from 'styled-components';
 import { Jokes } from './features/Jokes/Jokes';
 import { SubmitJokePage } from './features/Jokes/SubmitJokePage';
@@ -53,7 +52,6 @@ function App() {
           <Route component={Jokes} path="/" />
           <Route component={SubmitJokePage} path="/addnew" />
         </Router>
-        <Counter />
       </Main>
     </StyledApp>
   );
