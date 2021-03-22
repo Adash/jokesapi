@@ -36,11 +36,6 @@ export const {
   setCategories,
 } = jokesSlice.actions;
 
-// export const incrementAsync = (amount: number): AppThunk => (dispatch) => {
-//   setTimeout(() => {
-//     dispatch(setSearchString(amount));
-//   }, 1000);
-// };
 export const selectTotalCount = (state: RootState) => state.jokes.totalCount;
 export const selectJokesList = (state: RootState) => state.jokes.jokesList;
 export const selectCategories = (state: RootState) => state.jokes.categories;
