@@ -1,27 +1,70 @@
 import React, { useState } from 'react';
-import { submitJoke } from './jokesAPI';
+import { submitJoke, submitJokeType } from './jokesAPI';
 import { useSelector } from 'react-redux';
 import { selectCategories } from './jokesSlice';
 import styled from 'styled-components';
+import { StyledSelect } from './Jokes';
 
 const StyledSubmitJokesComponent = styled.div`
-  width: 100vw;
-  height: 100vh;
-  background-color: coral;
+  top: 60px;
+  position: relative;
+  width: 100%;
+  background-color: #168aad;
+  color: #d9ed92;
+
+  h2 {
+    padding: 20px;
+    font-size: 22px;
+  }
 `;
 
 const StyledForm = styled.form`
   padding: 20px;
   background-color: lightblue;
+  color: #2b3602;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 `;
 
-const StyledJokeInputField = styled.input`
+const StyledJokeInputField = styled.textarea`
+  border: none;
+  border-radius: 3px;
+  padding: 2px 3px;
   min-height: 200px;
   min-width: 300px;
+  margin-bottom: 15px;
+  margin-left: 5px;
+  margin-right: 5px;
+`;
+
+const StyledJokeWrapper = styled.div`
+  position: relative;
+  margin-top: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+  label {
+    position: absolute;
+    top: -18px;
+  }
+`;
+
+const StyledOptionsWrapper = styled.div`
+  width: 300px;
+  display: flex;
+  justify-content: space-between;
+`;
+
+const Button = styled.button`
+  border: none;
+  border-radius: 3px;
+  padding: 6px 12px;
+  font-size: 18px;
+  background-color: #1a759f;
+  color: #d9ed92;
 `;
 
 const SingleJokeText = ({
@@ -32,17 +75,16 @@ const SingleJokeText = ({
   setJokeText: (text: string) => void;
 }) => {
   return (
-    <>
-      <label htmlFor="joke-text">Joke:</label>
+    <StyledJokeWrapper>
+      <label htmlFor="joke-text">Joke text:</label>
       <StyledJokeInputField
         id="joke-text"
-        type="text"
         value={jokeText}
         onChange={(event) => {
           setJokeText(event.target.value);
         }}
       />
-    </>
+    </StyledJokeWrapper>
   );
 };
 
@@ -58,27 +100,28 @@ const TwoPartJokeText = ({
   setDeliveryText: (text: string) => void;
 }) => {
   return (
-    <>
-      <label htmlFor="setup-text">Setup:</label>
-      <StyledJokeInputField
-        id="setup-text"
-        type="text"
-        value={setupText}
-        onChange={(event) => {
-          setSetupText(event.target.value);
-        }}
-      />
-
-      <label htmlFor="delivery-text">Delivery:</label>
-      <StyledJokeInputField
-        id="setup-text"
-        type="text"
-        value={deliveryText}
-        onChange={(event) => {
-          setDeliveryText(event.target.value);
-        }}
-      />
-    </>
+    <StyledJokeWrapper>
+      <div>
+        <label htmlFor="setup-text">Setup:</label>
+        <StyledJokeInputField
+          id="setup-text"
+          value={setupText}
+          onChange={(event) => {
+            setSetupText(event.target.value);
+          }}
+        />
+      </div>
+      <div>
+        <label htmlFor="delivery-text">Delivery:</label>
+        <StyledJokeInputField
+          id="setup-text"
+          value={deliveryText}
+          onChange={(event) => {
+            setDeliveryText(event.target.value);
+          }}
+        />
+      </div>
+    </StyledJokeWrapper>
   );
 };
 
@@ -92,7 +135,7 @@ export function SubmitJokePage() {
 
   const onJokeSubmit = (event: any) => {
     event.preventDefault();
-    const newJoke =
+    const newJoke: submitJokeType =
       jokeType === 'single'
         ? {
             formatVersion: 3,
@@ -130,8 +173,33 @@ export function SubmitJokePage() {
 
   return (
     <StyledSubmitJokesComponent>
-      <p>submit jokes</p>
+      <h2>Submit new Joke</h2>
       <StyledForm onSubmit={onJokeSubmit}>
+        <StyledOptionsWrapper>
+          <StyledSelect
+            value={category}
+            onChange={(event) => {
+              setCategory(event.target.value);
+            }}
+          >
+            {categories.length !== 0
+              ? categories.map((category: string) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                ))
+              : null}
+          </StyledSelect>
+          <StyledSelect
+            value={jokeType}
+            onChange={(event) => {
+              setJokeType(event.target.value);
+            }}
+          >
+            <option value="single">Single</option>
+            <option value="twopart">Two-part</option>
+          </StyledSelect>
+        </StyledOptionsWrapper>
         {jokeType === 'single' ? (
           <SingleJokeText jokeText={jokeText} setJokeText={setJokeText} />
         ) : (
@@ -142,30 +210,8 @@ export function SubmitJokePage() {
             setDeliveryText={setDeliveryText}
           />
         )}
-        <select
-          value={category}
-          onChange={(event) => {
-            setCategory(event.target.value);
-          }}
-        >
-          {categories.length !== 0
-            ? categories.map((category: string) => (
-                <option key={category} value={category}>
-                  {category}
-                </option>
-              ))
-            : null}
-        </select>
-        <select
-          value={jokeType}
-          onChange={(event) => {
-            setJokeType(event.target.value);
-          }}
-        >
-          <option value="single">Single</option>
-          <option value="twopart">Two-part</option>
-        </select>
-        <button type="submit">submit</button>
+
+        <Button type="submit">submit</Button>
       </StyledForm>
     </StyledSubmitJokesComponent>
   );

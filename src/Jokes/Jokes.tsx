@@ -10,13 +10,41 @@ import {
 import styled from 'styled-components';
 
 const StyledJokesComponent = styled.div`
-  background-color: coral;
+  top: 60px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+`;
+
+const StyledControls = styled.div`
+  width: 100%;
+  background-color: #168aad;
+  color: #d9ed92;
+  padding-top: 7px;
+
+  div {
+    padding-bottom: 7px;
+  }
+`;
+
+export const StyledSelect = styled.select`
+  border: none;
+  border-radius: 3px;
+  padding: 2px 3px;
+`;
+
+export const StyledInput = styled.input`
+  border: none;
+  border-radius: 3px;
+  padding: 2px 3px;
 `;
 
 const StyledJokesList = styled.div`
   width: 600px;
-  background-color: greenyellow;
-  color: darkgreen;
+  background-color: #d9ed92;
+  color: #ecf3f3;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -26,9 +54,15 @@ const StyledJokesList = styled.div`
 const StyledJoke = styled.div`
   width: 400px;
   list-style: none;
-  background-color: lightgreen;
+  background-color: #34a0a4;
   padding: 15px;
   margin-bottom: 10px;
+`;
+
+const ErrorMessage = styled.p`
+  padding: 30px;
+  color: #803b3b;
+  font-size: 18px;
 `;
 
 const TwoPartJoke = ({ joke }: { joke: jokeType }) => (
@@ -102,32 +136,37 @@ export function Jokes() {
 
   return (
     <StyledJokesComponent>
-      <p>Total number of jokes: {totalCount}</p>
-      <p>
-        {/* consider extracting this component and reusing it (used in SubmitJokePage) */}
-        Select Joke category:
-        <select value={category} onChange={onCategoryChange}>
-          {categories.length !== 0
-            ? categories.map((category: string) => (
-                <option key={category} value={category}>
-                  {category}
-                </option>
-              ))
-            : null}
-        </select>
-      </p>
-      <label htmlFor="searchInput">search for jokes: </label>
-      <input
-        type="text"
-        id="searchInput"
-        value={searchString}
-        onChange={(event) => {
-          setSearchString(event.target.value);
-        }}
-      />
-
+      <StyledControls>
+        <div>Total number of jokes: {totalCount}</div>
+        <div>
+          {/* consider extracting this component and reusing it (used in SubmitJokePage) */}
+          Select Joke category:
+          <StyledSelect value={category} onChange={onCategoryChange}>
+            {categories.length !== 0
+              ? categories.map((category: string) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                ))
+              : null}
+          </StyledSelect>
+        </div>
+        <div>
+          <label htmlFor="searchInput">search for jokes: </label>
+          <StyledInput
+            type="text"
+            id="searchInput"
+            value={searchString}
+            onChange={(event) => {
+              setSearchString(event.target.value);
+            }}
+          />
+        </div>
+      </StyledControls>
       <StyledJokesList>
-        {errorMessage.length ? <p>{errorMessage}</p> : null}
+        {errorMessage.length ? (
+          <ErrorMessage>{errorMessage}</ErrorMessage>
+        ) : null}
         {jokesList?.length !== 0
           ? jokesList.map((joke: jokeType) => (
               <SingleJoke key={joke.id} joke={joke} />

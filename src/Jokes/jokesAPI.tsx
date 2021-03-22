@@ -45,13 +45,15 @@ export async function getJokes(
   let status = 'idle';
   let message = '';
 
+  // this function generates the correct url params. If the search string is not
+  // empty the 'contains' param will be added to the string
   const getURL = () =>
     searchString === ''
       ? `${jokesURL}/joke/${category}?amount=10&safe-mode`
       : `${jokesURL}/joke/${category}?amount=10&contains=${encodeURIComponent(
           searchString
         )}&safe-mode`;
-  console.log(getURL());
+
   try {
     status = 'loading';
     let response = await fetch(getURL());
@@ -97,7 +99,7 @@ export async function getInfo() {
   return info;
 }
 
-export function submitJoke(data: object) {
+export function submitJoke(data: submitJokeType) {
   const submitJokeURL = 'https://v2.jokeapi.dev/submit?dry-run';
   let response = '';
 

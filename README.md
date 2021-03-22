@@ -4,17 +4,16 @@
 
 ### Overview
 
-The App component is wrapping everything style-wise and handling routing.
+The App component is handling the routing.
 
 There are two pages split into two separate components: Jokes and SubmitJokePage.
 
-The App component loads the total count and categories data from the 'info' endpoint
-and stores it in the Redux store (so it can be shared between the two components mentioned above)
+The App component loads the total count and categories data from the 'info' endpoint and stores it in the Redux store (so it can be shared between the two components mentioned above)
 
 In the Jokes component/page the list of jokes if fetched from the API and stored in the Redux store.
 Elements of the state which are used only within that component are not stored in Redux but in the component's state (using useState): searchString, category and errorMessage.
 
-The SubmitJokePage gets the categories list from Redux but stores the rest of the variables within the component
+The SubmitJokePage gets the categories list from Redux but stores the rest of the variables within the component.
 
 ### `yarn start`
 

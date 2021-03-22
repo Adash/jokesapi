@@ -1,5 +1,5 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
-import jokesReducer from '../features/Jokes/jokesSlice';
+import jokesReducer from '../Jokes/jokesSlice';
 
 export const store = configureStore({
   reducer: {

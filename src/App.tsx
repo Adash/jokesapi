@@ -1,11 +1,11 @@
 import React, { useEffect, FunctionComponent } from 'react';
 import { Router, Link, RouteComponentProps } from '@reach/router';
 import styled from 'styled-components';
-import { Jokes } from './features/Jokes/Jokes';
-import { SubmitJokePage } from './features/Jokes/SubmitJokePage';
-import { getInfo } from './features/Jokes/jokesAPI';
+import { Jokes } from './Jokes/Jokes';
+import { SubmitJokePage } from './Jokes/SubmitJokePage';
+import { getInfo } from './Jokes/jokesAPI';
 import { useDispatch } from 'react-redux';
-import { setTotalCount, setCategories } from './features/Jokes/jokesSlice';
+import { setTotalCount, setCategories } from './Jokes/jokesSlice';
 
 // the wrapper below was implemented because typescript was complaining about 'path' prop on the component
 type Props = { component: FunctionComponent } & RouteComponentProps;
@@ -14,16 +14,20 @@ const Route: FunctionComponent<Props> = ({ component: Component, ...rest }) => (
 );
 
 const StyledApp = styled.div`
+  height: 100vh;
+  width: 100vw;
   text-align: center;
 `;
 
 const Header = styled.header`
+  z-index: 10;
   width: 100vw;
   height: 60px;
+  position: fixed;
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  background-color: teal;
+  background-color: #1a759f;
 `;
 
 const StyledLink = styled(Link)`
@@ -32,14 +36,13 @@ const StyledLink = styled(Link)`
   font-size: 18px;
   color: white;
   cursor: pointer;
+
+  :hover {
+    color: #184e77;
+  }
 `;
 
 const Main = styled.div`
-  height: 100%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
 `;
 
