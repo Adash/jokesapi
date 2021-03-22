@@ -42,13 +42,17 @@ export const StyledInput = styled.input`
 `;
 
 const StyledJokesList = styled.div`
-  width: 600px;
+  width: 100%;
   background-color: #d9ed92;
   color: #ecf3f3;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  text-align: left;
+  p {
+    margin-bottom: 3px;
+  }
 `;
 
 const StyledJoke = styled.div`
@@ -66,21 +70,25 @@ const ErrorMessage = styled.p`
 `;
 
 const TwoPartJoke = ({ joke }: { joke: jokeType }) => (
-  <ul>
-    <li>{joke.setup}</li>
-    <li> ... </li>
-    <li>{joke.delivery}</li>
-    <li>Category: {joke.category}</li>
-    <li>Type: {joke.type}</li>
-  </ul>
+  <div>
+    <p>Category: {joke.category}</p>
+    <p>Type: {joke.type}</p>
+    <hr />
+    <p>{joke.setup}</p>
+    <p> . </p>
+    <p> .. </p>
+    <p> ... </p>
+    <p>{joke.delivery}</p>
+  </div>
 );
 
 const SinglePartJoke = ({ joke }: { joke: jokeType }) => (
-  <ul>
-    <li>{joke.joke}</li>
-    <li>Category: {joke.category}</li>
-    <li>Type: {joke.type}</li>
-  </ul>
+  <div>
+    <p>Category: {joke.category}</p>
+    <p>Type: {joke.type}</p>
+    <hr />
+    <p>{joke.joke}</p>
+  </div>
 );
 
 const SingleJoke = ({ joke }: { joke: jokeType }) => {
